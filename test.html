@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>一公里·生活</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/app.css">
+    	<link href="css/1Km.css" rel="stylesheet"/>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">测试基地</h1>
+		</header>
+		<div id="pullrefresh" class="mui-content">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view" id="topic_list"></ul>
+			</div>
+			<a href="login.html" class="mui-btn mui-btn-green">Login Page</a>
+			
+			<div style="width: 90%;margin: 5px auto;">
+				<label class="mui-icon mui-icon-phone"><span>手机号码</span></label>
+		    	<input type="text" name="mobile" id="mobile" value="" />
+				<label class="mui-icon mui-icon-arrowdown"><span>密码</span></label>
+		    	<input type="text" name="key" id="key" value="" />
+		    	<br />
+		    	<br />
+				<input id="login_submit" type="submit" class="mui-btn  mui-btn-danger mui-btn-block" style="padding: 15px;font-size: 18px;" value="登录"/>
+			</div>
+			<br />
+			<br />
+				<input id="login_1km" type="submit" class="mui-btn  mui-btn-danger mui-btn-block" style="padding: 25px;" value="1kmAPI测试"/>
+			<br />
+				<label id="backtxt">hello</label>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/zepto.min.js"></script>
+		<script src="js/arttmpl.js"></script>
+		<script src="js/base.js"></script>
+		<script type="text/javascript">
+			var index;
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
+			});
+			mui.plusReady(function() {
+				//获得主页面webview引用；
+				index = plus.webview.currentWebview().opener();
+			});
+			
+			//发送请求按钮的点击事件
+					var moblie=$('mobile').value; 
+					var key=$('key').value; 
+				document.getElementById("login_submit").addEventListener('tap', function() {
+					
+					var apiUrl = _ApiUrl+"/login/index/";
+						$.getJSON(apiUrl,{
+							"cmd":"Login", "code":'4',"type":"1", "key":'981119'
+							}, 
+							function(data) {
+								alert(JSON.stringify(data));//JSON.stringify(data)
+							}
+						);
+				});
+			//发送请求按钮的点击事件
+				document.getElementById("login_1km").addEventListener('tap', function() {
+					
+					var apiUrl = "http://tp5.xset.net/index.php/index/Api/ApiTest/cmd/GetUpdate";//"http://1km.qixun.im/Login";
+					var info=$('#code').val();
+						$.getJSON(apiUrl,{
+							"cmd":"Login", "code":"18991891518","type":"01", "key":"981119"
+							}, 
+							function(data) {
+								alert(JSON.stringify(data));
+							}
+						);
+				});
+
+			function pulldownRefresh() {
+				var apiUrl = _ApiUrl+"/Login";
+						$.getJSON(apiUrl, {
+							"cmd":"GetUpdate","code":"4"
+						}, function(data) {
+							alert(JSON.stringify(data));
+							
+//							record.push({
+//								sender: 'zs',
+//								type: 'text',
+//								content: data.text
+//							});
+//							bindMsgList();
+						});
+			}
+			function pullupRefresh() {
+				var apiUrl = 'http://www.tuling123.com/openapi/api';
+						$.getJSON(
+						apiUrl,
+						{
+							"key": '8efade59494f7b582324866f4fd3058a',
+							"info": 'ceshi info',
+							"userid": plus.device.uuid
+						}, 
+						function(data) {
+							alert(JSON.stringify("data"));
+//							record.push({
+//								sender: 'zs',
+//								type: 'text',
+//								content: data.text
+//							});
+//							bindMsgList();
+						});
+			}
+//			if (mui.os.plus) {
+//				mui.plusReady(function() {
+//					setTimeout(function() {
+//						mui('#pullrefresh').pullRefresh().pullupLoading();
+//					}, 500);
+//				});
+//			} else {
+//				mui.ready(function() {
+//					mui('#pullrefresh').pullRefresh().pullupLoading();
+//				});
+//			}
+		
+		
+		
+		
+		</script>
+	</body>
+</html>

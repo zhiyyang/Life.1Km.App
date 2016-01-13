@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+</head>
+<body>
+	<div class="mui-content">
+	    <div id="index">这是主页</div>
+	    
+		<a id="loginpage" class="mui-btn mui-btn-danger mui-btn-block" style="padding: 25px;">Login Page</a>
+		<br />
+	</div>
+	<script src="js/app.js"></script>
+	<script src="js/update.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+			var index_left = null,
+				index_right = null,
+				main = null;
+			var showLeft = false,
+				showRight = false;
+      	mui.init({
+				swipeBack: false,
+				statusBarBackground: '#f7f7f7',
+				gestureConfig: {
+					doubletap: true
+				},
+      	);
+			mui.plusReady(function() {
+				//仅支持竖屏显示
+				plus.screen.lockOrientation("portrait-primary");
+				main = plus.webview.currentWebview();
+				main.addEventListener('maskClick', closeRight);
+				main.addEventListener('swipeleft', closeRight);
+				
+				//处理侧滑导航，为了避免和子页面初始化等竞争资源，延迟加载侧滑页面；
+				setTimeout(function() {
+					index_right = mui.preload({
+						id: 'index_right',
+						url: 'index_right.html',
+						styles: {
+							right: 0,
+							width: '68%',
+							zindex: -1
+						},
+						show: {
+							aniShow: 'none'
+						}
+					});
+					login = mui.preload({
+						id: 'login',
+						url: 'login.html',
+						styles: {
+							right: 0,
+							width: '100%',
+							zindex: -1
+						},
+						show: {
+							aniShow: 'none'
+						}
+					})
+				}, 200);
+			});
+			//tap为mui封装的单击事件，可参考手势事件章节
+			document.getElementById('loginpage').addEventListener('tap', function() {
+			  //打开我页面
+			  mui.openWindow({
+			    url: 'login.html', 
+			    id:'login',
+			  	show:{
+			  		aniShow:'slide-in-left',
+					duration: 300
+			  	},
+			  });
+			});	
+    </script>
+</body>
+</html>

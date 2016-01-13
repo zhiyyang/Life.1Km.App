@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>File Example</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/app.css">
+    	<link href="css/1Km.css" rel="stylesheet"/>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+	<script type="text/javascript">
+		mui.init();
+		mui.plusReady(function(){
+		    console.log("当前页面URL："+plus.webview.currentWebview().getURL());
+		});
+		// 扩展API加载完毕后调用onPlusReady回调函数 
+		document.addEventListener( "plusready", onPlusReady, false );
+		// 扩展API加载完毕，现在可以正常调用扩展API
+		function onPlusReady() {
+			plus.io.requestFileSystem( plus.io.PRIVATE_WWW, function( fs ) {
+				// 可通过fs操作PRIVATE_WWW文件系统 
+				// ......
+			}, function ( e ) {
+				alert( "Request file system failed: " + e.message );
+			} );
+		}
+		
+		// H5 plus事件处理
+		function plusReady(){
+			//alert( "IMEI: " + plus.device.imei ); //IOS不支持
+			//alert( "Vendor: " + plus.device.vendor );
+			alert( "uuid: "+plus.device.uuid );
+			//plus.device.beep( 3 ); //发出蜂鸣声
+			//plus.device.vibrate(2000); //震动
+			alert("version:"+plus.os.vendor+" "+plus.os.version);//系统版本
+			
+			// 添加监听从系统消息中心点击某条消息启动应用事件
+			plus.push.addEventListener( "click", function ( msg ) {
+				// 分析msg.payload处理业务逻辑 
+				alert( "You clicked: " + msg.content ); 
+			}, false ); 
+			
+			plus.oauth.getServices( function(services){
+				auths = services;
+			}, function(e){
+				alert( "获取分享服务列表失败："+e.message+" - "+e.code );
+			} );
+		}
+		
+		function dialTest() {
+			plus.device.dial( "10000", false );
+		}
+		// 登录操作
+		function authLogin(){
+			var s = auths[2]; //0,QQ;1,微博;2,微信;
+			if ( !s.authResult ) {
+				s.login( function(e){
+					alert( "登录认证成功！" );
+				}, function(e){
+					alert( "登录认证失败！" );
+				} );
+			}else{
+				alert( "已经登录认证！" );
+			}
+		}
+		// 获取登录用户信息操作
+		function authUserInfo(){
+			var s = auths[2];//0,QQ;1,微博;2,微信;
+			if ( !s.authResult ) {
+				alert("未授权登录！");
+			} else {
+				s.getUserInfo( function(e){
+					alert( "获取用户信息成功："+JSON.stringify(s.userInfo) );
+				}, function(e){
+					alert( "获取用户信息失败："+e.message+" - "+e.code );
+				} );
+			}
+		}
+		// 注销所有授权登录认证服务
+		function authLogout(){
+			for ( var i in auths ) {
+				var s = auths[i];
+				if ( s.authResult ) {
+					s.logout(function(e){
+						alert( "注销登录认证成功！" );
+					}, function(e){
+						alert( "注销登录认证失败！" );
+					});
+				}
+			}
+		}
+		// 打开登录页面
+		function OpenLogin(){
+			//打开发现页面
+			  mui.openWindow({
+			    url: 'login.html', 
+			    id:'login',
+			  	show:{
+			  		aniShow:'slide-in-down',
+					duration: 300
+			  	},
+			  });
+		}
+		// 监听“返回”按钮事件
+//		function addEventTest() {
+//			plus.key.addEventListener("backbutton",function(){
+//				alert( "BackButton Key pressed!" );
+//			});
+//		}
+//		
+		
+		if(window.plus){
+			plusReady();
+		}else{
+			document.addEventListener("plusready",plusReady,false);
+		}
+	</script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">Client</h1>
+		</header>
+		<div class="mui-content" style="">
+		    <button onclick="dialTest()" style="float:left;margin: 10px;padding: 10px;">拨打 10000 号</button>
+			<button onclick="addEventTest()" style="float:left;margin: 10px;padding: 10px;">监听“返回”按键</button>
+			<button onclick="authUserInfo()" style="float:left;margin: 10px;padding: 10px;">UserInfo</button>
+			<button onclick="authLogin()" style="float:left;margin: 10px;padding: 10px;">Login</button>
+			<button onclick="authLogout()" style="float:left;margin: 10px;padding: 10px;">LogOut</button>
+			<button onclick="OpenLogin()" style="float:left;margin: 10px;padding: 10px;">Open Login</button>
+		</div>
+	</body>
+</html>

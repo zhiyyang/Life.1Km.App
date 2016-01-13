@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>footer</title>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/1Km.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+</head>
+<body>
+	<footer id="footer">
+		<ul id="nv">
+			<li><a class="mui-icon mui-icon-person"><div>我</div></a></li>
+			<li><a class="mui-icon mui-icon-chatbubble"><div>会话</div></a></li>
+			<li><a class="mui-icon mui-icon-search"><div>发现</div></a></li>
+			<li><a class="mui-icon mui-icon-personadd"><div>联系人</div></a></li>
+		</ul>
+	</footer>
+	<script src="js/mui.min.js"></script>
+	<script type="text/javascript">
+		
+			//点击左上角侧滑图标，打开侧滑菜单；
+			document.querySelector('.mui-icon-person').addEventListener('tap', function(e) {
+				if (showMenu) {
+					closeMenu();
+				} else {
+					openMenu();
+				}
+			});
+	</script>
+</body>
+</html>
